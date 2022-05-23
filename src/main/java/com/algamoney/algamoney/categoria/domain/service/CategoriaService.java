@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.algamoney.algamoney.categoria.domain.exception.CategoriaInUseException;
 import com.algamoney.algamoney.categoria.domain.exception.CategoriaNotFoundException;
 import com.algamoney.algamoney.categoria.domain.model.Categoria;
 import com.algamoney.algamoney.categoria.domain.model.Categoria_;
@@ -50,6 +52,8 @@ public class CategoriaService {
 			categoriaRepository.flush();			
 		} catch (EmptyResultDataAccessException e) {
 			throw new CategoriaNotFoundException(categoriaId);
+		} catch (DataIntegrityViolationException e) {
+			throw new CategoriaInUseException(categoriaId);
 		}
 
 	}

@@ -1,0 +1,61 @@
+package com.algamoney.algamoney.lancamento.domain.model;
+
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
+import com.algamoney.algamoney.categoria.domain.model.Categoria;
+import com.algamoney.algamoney.pessoa.domain.model.Pessoa;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Getter
+@Setter
+@Entity
+@Table(name = "lancamento")
+@EntityListeners(AuditingEntityListener.class)
+public class Lancamento {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private UUID id;
+	
+	@Enumerated(EnumType.STRING)
+	private TipoLancamento tipo;
+	
+	@ManyToOne
+	@JoinColumn(name = "pessoa_id")
+	private Pessoa pessoa;
+	
+	@ManyToOne
+	@JoinColumn(name = "categoria_id")
+	private Categoria categoria;
+	
+	@DateTimeFormat(iso = ISO.DATE)
+	private OffsetDateTime vencimento;
+	
+	@DateTimeFormat(iso = ISO.DATE)
+	private OffsetDateTime pagamento;
+	
+	private BigDecimal valor;
+	
+	private String observacao;
+}

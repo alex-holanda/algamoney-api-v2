@@ -34,6 +34,7 @@ import com.algamoney.algamoney.common.api.model.Problem;
 import com.algamoney.algamoney.common.api.model.ProblemObject;
 import com.algamoney.algamoney.common.api.model.ProblemType;
 import com.algamoney.algamoney.common.domain.BusinessException;
+import com.algamoney.algamoney.common.domain.EntityInUseException;
 import com.algamoney.algamoney.common.domain.EntityNotFoundException;
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
@@ -69,6 +70,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(EntityNotFoundException.class)
 	public ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException ex, WebRequest request) {
 		return handleNotFound(ex, request);
+	}
+	
+	@ExceptionHandler(EntityInUseException.class)
+	public ResponseEntity<Object> handleEntityInUse(EntityInUseException ex, WebRequest request) {
+		var problemType = ProblemType.ENTITY_IN_USE;
+		var status = problemType.getStatus();
+		var detail = ex.getMessage();
+		
+		var problem = createProblemBuilder(status, problemType, detail).userMessage(detail).build();
+		
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
 	
 	@ExceptionHandler(BusinessException.class)
