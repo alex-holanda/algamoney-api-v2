@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,12 +66,18 @@ public class CategoriaController {
 	@PutMapping("/{categoriaId}")
 	public ResponseEntity<CategoriaModel> atualizar(@PathVariable UUID categoriaId,
 			@Valid @RequestBody CategoriaInput categoriaInput) {
-		
+
 		var categoria = categoriaInputAssembler.toDomainObject(categoriaInput);
 		categoria = categoriaService.atualizar(categoriaId, categoria);
-		
+
 		var categoriaModel = categoriaModelAssembler.toModel(categoria);
-		
+
 		return ResponseEntity.ok(categoriaModel);
+	}
+
+	@DeleteMapping("/{categoriaId}")
+	public ResponseEntity<Void> remover(@PathVariable UUID categoriaId) {
+		categoriaService.remover(categoriaId);
+		return ResponseEntity.noContent().build();
 	}
 }

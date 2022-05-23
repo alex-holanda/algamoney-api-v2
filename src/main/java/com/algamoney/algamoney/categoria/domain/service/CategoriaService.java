@@ -4,15 +4,14 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.algamoney.algamoney.categoria.domain.exception.CategoriaNotFoundException;
 import com.algamoney.algamoney.categoria.domain.model.Categoria;
 import com.algamoney.algamoney.categoria.domain.model.Categoria_;
 import com.algamoney.algamoney.categoria.domain.repository.CategoriaRepository;
-import com.algamoney.algamoney.common.domain.EntityNotFoundException;
 
 import lombok.AllArgsConstructor;
 
@@ -27,8 +26,7 @@ public class CategoriaService {
 	}
 
 	public Categoria buscar(UUID categoriaId) {
-		return categoriaRepository.findById(categoriaId).orElseThrow(() -> new EntityNotFoundException(
-				String.format("Categoria com código %s não foi encontrado.", categoriaId)));
+		return categoriaRepository.findById(categoriaId).orElseThrow(() -> new CategoriaNotFoundException(categoriaId));
 	}
 
 	@Transactional
@@ -49,9 +47,10 @@ public class CategoriaService {
 	public void remover(UUID categoriaId) {
 		try {
 			categoriaRepository.deleteById(categoriaId);
-			categoriaRepository.flush();
-		} catch (DataIntegrityViolationException | EmptyResultDataAccessException e) {
-			System.out.println(">>> " + e.getMessage());
+			categoriaRepository.flush();			
+		} catch (EmptyResultDataAccessException e) {
+			throw new CategoriaNotFoundException(categoriaId);
 		}
+
 	}
 }
