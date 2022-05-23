@@ -17,6 +17,8 @@
 	<properties>
 		<java.version>11</java.version>
 		
+		<commons-io.version>2.11.0</commons-io.version>
+		
 		<!-- Modelmapper -->
 		<modelmapper.version>3.1.0</modelmapper.version>
 	</properties>
@@ -35,6 +37,10 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-jpamodelgen</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -68,6 +74,20 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-hateoas</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io.version}</version>
+		</dependency>
 
 		<!-- Modelmapper -->
 		<dependency>
@@ -75,10 +95,7 @@
 			<artifactId>modelmapper</artifactId>
 			<version>${modelmapper.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-hateoas</artifactId>
-		</dependency>
+		
 	</dependencies>
 
 	<build>
