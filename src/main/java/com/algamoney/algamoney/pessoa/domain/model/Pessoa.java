@@ -34,4 +34,16 @@ public class Pessoa {
 	
 	@Embedded
 	private Endereco endereco;
+	
+	public void ativar() {
+		setAtivo(Boolean.TRUE);
+	}
+	
+	public void inativar() {
+		setAtivo(Boolean.FALSE);
+	}
+	
+	public boolean isInativo() {
+		return !this.ativo;
+	}
 }

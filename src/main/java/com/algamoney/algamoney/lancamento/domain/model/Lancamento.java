@@ -1,6 +1,7 @@
 package com.algamoney.algamoney.lancamento.domain.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -49,10 +50,11 @@ public class Lancamento {
 	@JoinColumn(name = "categoria_id")
 	private Categoria categoria;
 	
-	@DateTimeFormat(iso = ISO.DATE)
-	private OffsetDateTime vencimento;
+	private String descricao;
 	
 	@DateTimeFormat(iso = ISO.DATE)
+	private LocalDate vencimento;
+	
 	private OffsetDateTime pagamento;
 	
 	private BigDecimal valor;

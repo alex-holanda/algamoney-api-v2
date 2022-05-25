@@ -5,7 +5,7 @@ CREATE TABLE lancamento (
     tipo VARCHAR(30) NOT NULL,
     descricao VARCHAR(200) NOT NULL,
     vencimento DATE NOT NULL,
-    pagamento DATE,
+    pagamento DATETIME,
     valor DECIMAL(10,2) NOT NULL,
     observacao VARCHAR(200),
     
