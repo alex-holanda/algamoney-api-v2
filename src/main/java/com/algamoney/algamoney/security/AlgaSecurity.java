@@ -23,6 +23,30 @@ public class AlgaSecurity {
 	public static final String SCOPE_READ = "SCOPE_read";
 	
 	private final UsuarioRepository usuarioRepository;
+
+//	Lançamentos
+	
+	public boolean podeConsultarLancamentos() {
+		return isAuthenticated() && hasScopeRead();
+	}
+	
+	public boolean podeGerenciarLancamento() {
+		return isAuthenticated() && hasScopeWrite() && hasAuthority("EDITAR_LANCAMENTO");
+	}
+	
+	public boolean podeGerarRelatorio() {
+		return isAuthenticated() && hasScopeRead() && hasAuthority("GERAR_RELATORIOS");
+	}
+	
+//	Pessoas
+	
+	public boolean podeConsultarPessoas() {
+		return isAuthenticated() && hasScopeRead();
+	}
+	
+	public boolean podeGerenciarPessoa() {
+		return isAuthenticated() && hasScopeWrite() && hasAuthority("EDITAR_PESSOA");
+	}
 	
 //	Categorias
 	

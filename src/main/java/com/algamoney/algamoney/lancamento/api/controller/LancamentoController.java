@@ -26,6 +26,7 @@ import com.algamoney.algamoney.lancamento.api.model.LancamentoModel;
 import com.algamoney.algamoney.lancamento.domain.filter.LancamentoFilter;
 import com.algamoney.algamoney.lancamento.domain.model.Lancamento;
 import com.algamoney.algamoney.lancamento.domain.service.LancamentoService;
+import com.algamoney.algamoney.security.CheckSecurity;
 
 import lombok.AllArgsConstructor;
 
@@ -41,6 +42,7 @@ public class LancamentoController {
 	private final LancamentoInputAssembler lancamentoInputAssembler;
 
 	@GetMapping
+	@CheckSecurity.Lancamento.PodeConsultar
 	public ResponseEntity<PagedModel<LancamentoModel>> pesquisar(LancamentoFilter filter, Pageable pageable) {
 		var lancamentosPage = lancamentoService.pesquisar(filter, pageable);
 		var pagedModel = pagedResourcesAssembler.toModel(lancamentosPage, lancamentoModelAssembler);
@@ -49,6 +51,7 @@ public class LancamentoController {
 	}
 	
 	@GetMapping("/{lancamentoId}")
+	@CheckSecurity.Lancamento.PodeConsultar
 	public ResponseEntity<LancamentoModel> buscar(@PathVariable UUID lancamentoId) {
 		var lancamento = lancamentoService.buscar(lancamentoId);
 		var lancamentoModel = lancamentoModelAssembler.toModel(lancamento);
@@ -57,6 +60,7 @@ public class LancamentoController {
 	}
 
 	@PostMapping
+	@CheckSecurity.Lancamento.PodeGerenciar
 	public ResponseEntity<LancamentoModel> adicionar(@RequestBody @Valid LancamentoInput lancamentoInput) {
 		var lancamento = lancamentoInputAssembler.toDomainObject(lancamentoInput);
 		lancamento = lancamentoService.adicionar(lancamento);
@@ -69,6 +73,7 @@ public class LancamentoController {
 	}
 
 	@PutMapping("/{lancamentoId}")
+	@CheckSecurity.Lancamento.PodeGerenciar
 	public ResponseEntity<LancamentoModel> atualizar(@PathVariable UUID lancamentoId,
 			@RequestBody @Valid LancamentoInput lancamentoInput) {
 		var lancamento = lancamentoInputAssembler.toDomainObject(lancamentoInput);
@@ -80,6 +85,7 @@ public class LancamentoController {
 	}
 	
 	@DeleteMapping("/{lancamentoId}")
+	@CheckSecurity.Lancamento.PodeGerenciar
 	public ResponseEntity<Void> remover(@PathVariable UUID lancamentoId) {
 		lancamentoService.remover(lancamentoId);
 		

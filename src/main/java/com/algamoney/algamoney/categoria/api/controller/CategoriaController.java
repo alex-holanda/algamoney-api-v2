@@ -55,7 +55,7 @@ public class CategoriaController {
 	}
 
 	@PostMapping
-	@CheckSecurity.Categoria.PodegGerenciar
+	@CheckSecurity.Categoria.PodeGerenciar
 	public ResponseEntity<CategoriaModel> adicionar(@Valid @RequestBody CategoriaInput categoriaInput) {
 		var categoria = categoriaInputAssembler.toDomainObject(categoriaInput);
 		categoria = categoriaService.adicionar(categoria);
@@ -68,7 +68,7 @@ public class CategoriaController {
 	}
 
 	@PutMapping("/{categoriaId}")
-	@CheckSecurity.Categoria.PodegGerenciar
+	@CheckSecurity.Categoria.PodeGerenciar
 	public ResponseEntity<CategoriaModel> atualizar(@PathVariable UUID categoriaId,
 			@Valid @RequestBody CategoriaInput categoriaInput) {
 
@@ -81,7 +81,7 @@ public class CategoriaController {
 	}
 
 	@DeleteMapping("/{categoriaId}")
-	@CheckSecurity.Categoria.PodegGerenciar
+	@CheckSecurity.Categoria.PodeGerenciar
 	public ResponseEntity<Void> remover(@PathVariable UUID categoriaId) {
 		categoriaService.remover(categoriaId);
 		return ResponseEntity.noContent().build();

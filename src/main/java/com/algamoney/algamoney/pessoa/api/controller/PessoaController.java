@@ -24,6 +24,7 @@ import com.algamoney.algamoney.pessoa.api.model.PessoaInput;
 import com.algamoney.algamoney.pessoa.api.model.PessoaModel;
 import com.algamoney.algamoney.pessoa.api.model.PessoaSummaryModel;
 import com.algamoney.algamoney.pessoa.domain.service.PessoaService;
+import com.algamoney.algamoney.security.CheckSecurity;
 
 import lombok.AllArgsConstructor;
 
@@ -39,6 +40,7 @@ public class PessoaController {
 	private final PessoaInputAssembler pessoaInputAssembler;
 	
 	@GetMapping
+	@CheckSecurity.Pessoa.PodeConsultar
 	public ResponseEntity<CollectionModel<PessoaSummaryModel>> listar() {
 		var pessoas = pessoaService.listar();
 		var pessoasModel = pessoaSummaryModelAssembler.toCollectionModel(pessoas);
@@ -47,6 +49,7 @@ public class PessoaController {
 	}
 	
 	@GetMapping("/{pessoaId}")
+	@CheckSecurity.Pessoa.PodeConsultar
 	public ResponseEntity<PessoaModel> buscar(@PathVariable UUID pessoaId) {
 		var pessoa = pessoaService.buscar(pessoaId);
 		var pessoaModel = pessoaModelAssembler.toModel(pessoa);
@@ -55,6 +58,7 @@ public class PessoaController {
 	}
 	
 	@PostMapping
+	@CheckSecurity.Pessoa.PodeGerenciar
 	public ResponseEntity<PessoaModel> adicionar(@RequestBody @Valid PessoaInput pessoaInput) {
 		var pessoa = pessoaInputAssembler.toDomainObject(pessoaInput);
 		pessoa = pessoaService.adicionar(pessoa);
@@ -67,6 +71,7 @@ public class PessoaController {
 	}
 	
 	@PutMapping("/{pessoaId}")
+	@CheckSecurity.Pessoa.PodeGerenciar
 	public ResponseEntity<PessoaModel> atualizar(@PathVariable UUID pessoaId, @RequestBody @Valid PessoaInput pessoaInput) {
 		var pessoa = pessoaInputAssembler.toDomainObject(pessoaInput);
 		pessoa = pessoaService.atualizar(pessoaId, pessoa);
@@ -77,6 +82,7 @@ public class PessoaController {
 	}
 	
 	@PutMapping("/{pessoaId}/ativo")
+	@CheckSecurity.Pessoa.PodeGerenciar
 	public ResponseEntity<Void> ativar(@PathVariable UUID pessoaId) {
 		pessoaService.ativar(pessoaId);
 		
@@ -84,6 +90,7 @@ public class PessoaController {
 	}
 	
 	@DeleteMapping("/{pessoaId}")
+	@CheckSecurity.Pessoa.PodeGerenciar
 	public ResponseEntity<Void> remover(@PathVariable UUID pessoaId) {
 		pessoaService.remover(pessoaId);
 		
@@ -91,6 +98,7 @@ public class PessoaController {
 	}
 	
 	@DeleteMapping("/{pessoaId}/ativo")
+	@CheckSecurity.Pessoa.PodeGerenciar
 	public ResponseEntity<Void> inativar(@PathVariable UUID pessoaId) {
 		pessoaService.inativar(pessoaId);
 		
