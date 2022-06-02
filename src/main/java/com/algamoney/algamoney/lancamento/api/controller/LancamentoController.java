@@ -9,6 +9,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import com.algamoney.algamoney.lancamento.api.model.LancamentoInput;
 import com.algamoney.algamoney.lancamento.api.model.LancamentoModel;
 import com.algamoney.algamoney.lancamento.domain.filter.LancamentoFilter;
 import com.algamoney.algamoney.lancamento.domain.model.Lancamento;
+import com.algamoney.algamoney.lancamento.domain.service.LancamentoService;
 
 import lombok.AllArgsConstructor;
 
@@ -32,20 +34,20 @@ import lombok.AllArgsConstructor;
 @RequestMapping(path = "lancamentos", produces = MediaType.APPLICATION_JSON_VALUE)
 public class LancamentoController {
 
-	private final com.algamoney.algamoney.lancamento.domain.service.LancamentoService lancamentoService;
+	private final LancamentoService lancamentoService;
 
 	private final LancamentoModelAssembler lancamentoModelAssembler;
 	private final PagedResourcesAssembler<Lancamento> pagedResourcesAssembler;
 	private final LancamentoInputAssembler lancamentoInputAssembler;
 
 	@GetMapping
-	public ResponseEntity<PagedModel<LancamentoModel>> listar(LancamentoFilter filter, Pageable pageable) {
-		var lancamentosPage = lancamentoService.listar(filter, pageable);
+	public ResponseEntity<PagedModel<LancamentoModel>> pesquisar(LancamentoFilter filter, Pageable pageable) {
+		var lancamentosPage = lancamentoService.pesquisar(filter, pageable);
 		var pagedModel = pagedResourcesAssembler.toModel(lancamentosPage, lancamentoModelAssembler);
 
 		return ResponseEntity.ok(pagedModel);
 	}
-
+	
 	@GetMapping("/{lancamentoId}")
 	public ResponseEntity<LancamentoModel> buscar(@PathVariable UUID lancamentoId) {
 		var lancamento = lancamentoService.buscar(lancamentoId);
@@ -75,5 +77,12 @@ public class LancamentoController {
 		var lancamentoModel = lancamentoModelAssembler.toModel(lancamento);
 
 		return ResponseEntity.ok(lancamentoModel);
+	}
+	
+	@DeleteMapping("/{lancamentoId}")
+	public ResponseEntity<Void> remover(@PathVariable UUID lancamentoId) {
+		lancamentoService.remover(lancamentoId);
+		
+		return ResponseEntity.noContent().build();
 	}
 }

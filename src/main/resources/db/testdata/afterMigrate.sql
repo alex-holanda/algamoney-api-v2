@@ -4,6 +4,12 @@ TRUNCATE TABLE categoria;
 TRUNCATE TABLE pessoa;
 TRUNCATE TABLE lancamento;
 
+TRUNCATE TABLE permissao;
+TRUNCATE TABLE grupo;
+TRUNCATE TABLE grupo_permissao;
+TRUNCATE TABLE usuario;
+TRUNCATE TABLE usuario_grupo;
+
 set foreign_key_checks = 1;
 
 INSERT INTO categoria (id, nome) values (1, 'Lazer');
@@ -39,3 +45,35 @@ INSERT INTO lancamento (id, descricao, vencimento, pagamento, valor, observacao,
 INSERT INTO lancamento (id, descricao, vencimento, pagamento, valor, observacao, tipo, categoria_id, pessoa_id) values (14, 'Café', '2017-04-10', '2017-04-10', 4.32, null, 'DESPESA', 4, 2);
 INSERT INTO lancamento (id, descricao, vencimento, pagamento, valor, observacao, tipo, categoria_id, pessoa_id) values (15, 'Lanche', '2017-06-10', null, 10.20, null, 'DESPESA', 4, 1);
 
+insert into permissao (id, nome, descricao) values (1, 'EDITAR_CATEGORIA', 'Permite editar categoria');
+insert into permissao (id, nome, descricao) values (2, 'CONSULTAR_CATEGORIA', 'Permite a consulta de categorias');
+
+insert into permissao (id, nome, descricao) values (3, 'EDITAR_LANCAMENTO', 'Permite criar, editar ou gerenciar lançamento');
+insert into permissao (id, nome, descricao) values (4, 'CONSULTAR_LANCAMENTO', 'Permite consultar lancamentos');
+
+insert into permissao (id, nome, descricao) values (5, 'EDITAR_PESSOA', 'Permite criar, editar ou gerenciar pessoa');
+insert into permissao (id, nome, descricao) values (6, 'CONSULTAR_PESSOA', 'Permite consultar pessoa');
+
+insert into permissao (id, nome, descricao) values (7, 'CONSULTAR_USUARIOS_GRUPOS_PERMISSOES', 'Permite consultar usuários');
+insert into permissao (id, nome, descricao) values (8, 'EDITAR_USUARIOS_GRUPOS_PERMISSOES', 'Permite criar ou editar usuários');
+
+insert into permissao (id, nome, descricao) values (9, 'GERAR_RELATORIOS', 'Permite gerar relatórios');
+
+insert into grupo (id, nome) values 
+	(1, 'Administrador');
+
+# Adiciona todas as permissoes no grupo do gerente
+insert into grupo_permissao (grupo_id, permissao_id)
+select 1, id from permissao;
+
+insert into usuario (id, nome, email, senha, cadastro) values
+	(1, 'João da Silva', 'admin@algamoney.com.br', '$2a$10$7HvqR9YuNNV7oYKbzfKPGecluwvBw/h1cfTIppaxdEBHvk.shRbmC', utc_timestamp),
+	(2, 'Maria Joaquina', 'maria.vnd@algafood.com.br', '$2y$12$NSsM4gEOR7MKogflKR7GMeYugkttjNhAJMvFdHrBLaLp2HzlggP5W', utc_timestamp),
+	(3, 'José Souza', 'jose.aux@algafood.com.br', '$2y$12$NSsM4gEOR7MKogflKR7GMeYugkttjNhAJMvFdHrBLaLp2HzlggP5W', utc_timestamp),
+	(4, 'Sebastião Martins', 'sebastiao.cad@algafood.com.br', '$2y$12$NSsM4gEOR7MKogflKR7GMeYugkttjNhAJMvFdHrBLaLp2HzlggP5W', utc_timestamp),
+	(5, 'Manoel Lima', 'manoel.loja@gmail.com', '$2y$12$NSsM4gEOR7MKogflKR7GMeYugkttjNhAJMvFdHrBLaLp2HzlggP5W', utc_timestamp),
+	(6, 'Débora Mendonça', 'email.teste.aw+debora@gmail.com', '$2y$12$NSsM4gEOR7MKogflKR7GMeYugkttjNhAJMvFdHrBLaLp2HzlggP5W', utc_timestamp),
+	(7, 'Carlos Lima', 'email.teste.aw+carlos@gmail.com', '$2y$12$NSsM4gEOR7MKogflKR7GMeYugkttjNhAJMvFdHrBLaLp2HzlggP5W', utc_timestamp);
+
+insert into usuario_grupo (usuario_id, grupo_id) values 
+	(1, 1);

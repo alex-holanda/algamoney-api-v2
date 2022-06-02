@@ -3,6 +3,7 @@ package com.algamoney.algamoney.lancamento.domain.service;
 import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class LancamentoService {
 	private final CategoriaService categoriaService;
 	private final PessoaService pessoaService;
 
-	public Page<Lancamento> listar(LancamentoFilter filter, Pageable pageable) {
+	public Page<Lancamento> pesquisar(LancamentoFilter filter, Pageable pageable) {
 		return lancamentoRepository.findAll(LancamentoSpec.filter(filter), pageable);
 	}
 
@@ -63,13 +64,14 @@ public class LancamentoService {
 		try {
 			var categoria = categoriaService.buscar(lancamentoAtualizado.getCategoria().getId());
 			var pessoa = pessoaService.buscar(lancamentoAtualizado.getPessoa().getId());
-			
+
 			validatePessoaInativa(pessoa);
-			
+
 			var lancamento = buscar(lancamentoId);
-			
-			BeanUtils.copyProperties(lancamentoAtualizado, lancamento, Lancamento_.ID, Lancamento_.CATEGORIA, Lancamento_.PESSOA);
-			
+
+			BeanUtils.copyProperties(lancamentoAtualizado, lancamento, Lancamento_.ID, Lancamento_.CATEGORIA,
+					Lancamento_.PESSOA);
+
 			lancamento.setCategoria(categoria);
 			lancamento.setPessoa(pessoa);
 
@@ -78,7 +80,17 @@ public class LancamentoService {
 			throw new BusinessException(e.getMessage());
 		}
 	}
-	
+
+	@Transactional
+	public void remover(UUID lancamentoId) {
+		try {
+			lancamentoRepository.deleteById(lancamentoId);
+			lancamentoRepository.flush();
+		} catch (EmptyResultDataAccessException e) {
+			throw new LancamentoNotFoundException(lancamentoId);
+		}
+	}
+
 	private void validatePessoaInativa(Pessoa pessoa) {
 		if (pessoa.isInativo()) {
 			throw new PessoaInativaException(pessoa.getId());

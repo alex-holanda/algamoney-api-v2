@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import com.algamoney.algamoney.common.jpa.CustomJpaRepository;
 import com.algamoney.algamoney.lancamento.domain.model.Lancamento;
 
-public interface LancamentoRepository extends CustomJpaRepository<Lancamento, UUID>, JpaSpecificationExecutor<Lancamento> {
+public interface LancamentoRepository
+		extends CustomJpaRepository<Lancamento, UUID>, JpaSpecificationExecutor<Lancamento>, LancamentoRepositoryQueries {
 
 }
