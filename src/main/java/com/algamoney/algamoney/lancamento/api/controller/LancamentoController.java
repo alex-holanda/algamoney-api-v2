@@ -4,9 +4,9 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +24,6 @@ import com.algamoney.algamoney.lancamento.api.assembler.LancamentoModelAssembler
 import com.algamoney.algamoney.lancamento.api.model.LancamentoInput;
 import com.algamoney.algamoney.lancamento.api.model.LancamentoModel;
 import com.algamoney.algamoney.lancamento.domain.filter.LancamentoFilter;
-import com.algamoney.algamoney.lancamento.domain.model.Lancamento;
 import com.algamoney.algamoney.lancamento.domain.service.LancamentoService;
 import com.algamoney.algamoney.security.CheckSecurity;
 
@@ -38,16 +37,16 @@ public class LancamentoController {
 	private final LancamentoService lancamentoService;
 
 	private final LancamentoModelAssembler lancamentoModelAssembler;
-	private final PagedResourcesAssembler<Lancamento> pagedResourcesAssembler;
 	private final LancamentoInputAssembler lancamentoInputAssembler;
 
 	@GetMapping
 	@CheckSecurity.Lancamento.PodeConsultar
-	public ResponseEntity<PagedModel<LancamentoModel>> pesquisar(LancamentoFilter filter, Pageable pageable) {
+	public ResponseEntity<Page<LancamentoModel>> pesquisar(LancamentoFilter filter, Pageable pageable) {
 		var lancamentosPage = lancamentoService.pesquisar(filter, pageable);
-		var pagedModel = pagedResourcesAssembler.toModel(lancamentosPage, lancamentoModelAssembler);
+		var lancamentosModel = lancamentoModelAssembler.toCollectionModel(lancamentosPage.getContent());
+		var lancamentosModelPage = new PageImpl<LancamentoModel>(lancamentosModel, pageable, lancamentosPage.getTotalElements());
 
-		return ResponseEntity.ok(pagedModel);
+		return ResponseEntity.ok(lancamentosModelPage);
 	}
 	
 	@GetMapping("/{lancamentoId}")

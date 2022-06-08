@@ -1,10 +1,10 @@
 package com.algamoney.algamoney.pessoa.api.controller;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
 
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,7 +41,7 @@ public class PessoaController {
 	
 	@GetMapping
 	@CheckSecurity.Pessoa.PodeConsultar
-	public ResponseEntity<CollectionModel<PessoaSummaryModel>> listar() {
+	public ResponseEntity<List<PessoaSummaryModel>> listar() {
 		var pessoas = pessoaService.listar();
 		var pessoasModel = pessoaSummaryModelAssembler.toCollectionModel(pessoas);
 		

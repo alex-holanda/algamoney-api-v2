@@ -1,36 +1,30 @@
 package com.algamoney.algamoney.categoria.api.assembler;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
-import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
-import com.algamoney.algamoney.categoria.api.controller.CategoriaController;
 import com.algamoney.algamoney.categoria.api.model.CategoriaModel;
 import com.algamoney.algamoney.categoria.domain.model.Categoria;
-import com.algamoney.algamoney.common.api.AlgaLinks;
+
+import lombok.AllArgsConstructor;
 
 @Component
-public class CategoriaModelAssembler extends RepresentationModelAssemblerSupport<Categoria, CategoriaModel> {
+@AllArgsConstructor
+public class CategoriaModelAssembler {
 
 	private final ModelMapper modelMapper;
 
-	private final AlgaLinks algalinks;
 	
-	public CategoriaModelAssembler(ModelMapper modelMapper, AlgaLinks algalinks) {
-		super(CategoriaController.class, CategoriaModel.class);
-
-		this.modelMapper = modelMapper;
-		this.algalinks = algalinks;
-	}
-
-	@Override
 	public CategoriaModel toModel(Categoria categoria) {
-		var categoriaModel = createModelWithId(categoria.getId(), categoria);
-
-		modelMapper.map(categoria, categoriaModel);
+		var categoriaModel = modelMapper.map(categoria, CategoriaModel.class);
 		
-		categoriaModel.add(algalinks.linkToCategorias("categorias"));
-
 		return categoriaModel;
+	}
+	
+	public List<CategoriaModel> toCollectionModel(List<Categoria> categorias) {
+		return categorias.stream().map(this::toModel).collect(Collectors.toList());
 	}
 }

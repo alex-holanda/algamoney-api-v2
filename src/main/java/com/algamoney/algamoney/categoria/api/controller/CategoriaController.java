@@ -1,10 +1,10 @@
 package com.algamoney.algamoney.categoria.api.controller;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
 
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,7 +38,7 @@ public class CategoriaController {
 
 	@GetMapping
 	@CheckSecurity.Categoria.PodeConsultar
-	public ResponseEntity<CollectionModel<CategoriaModel>> listar() {
+	public ResponseEntity<List<CategoriaModel>> listar() {
 		var categorias = categoriaService.listar();
 		var categoriasModel = categoriaModelAssembler.toCollectionModel(categorias);
 

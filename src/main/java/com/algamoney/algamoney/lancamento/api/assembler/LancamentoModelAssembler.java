@@ -1,40 +1,30 @@
 package com.algamoney.algamoney.lancamento.api.assembler;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
-import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
-import com.algamoney.algamoney.common.api.AlgaLinks;
-import com.algamoney.algamoney.lancamento.api.controller.LancamentoController;
 import com.algamoney.algamoney.lancamento.api.model.LancamentoModel;
 import com.algamoney.algamoney.lancamento.domain.model.Lancamento;
 
+import lombok.AllArgsConstructor;
+
 @Component
-public class LancamentoModelAssembler extends RepresentationModelAssemblerSupport<Lancamento, LancamentoModel> {
+@AllArgsConstructor
+public class LancamentoModelAssembler {
 
 	private final ModelMapper modelMapper;
 	
-	private final AlgaLinks algalinks;
-	
-	public LancamentoModelAssembler(ModelMapper modelMapper, AlgaLinks algalinks) {
-		super(LancamentoController.class, LancamentoModel.class);
-		this.modelMapper = modelMapper;
-		this.algalinks = algalinks;
-	}
-
-	@Override
 	public LancamentoModel toModel(Lancamento lancamento) {
-		var lancamentoModel = createModelWithId(lancamento.getId(), lancamento);
-		
-		modelMapper.map(lancamento, lancamentoModel);
-		
-		lancamentoModel.add(algalinks.linkToLancamentos("lancamentos"));
-		
-		
-		lancamentoModel.getCategoria().add(algalinks.linkToCategoria(lancamento.getCategoria().getId(), "categoria"));
-		lancamentoModel.getPessoa().add(algalinks.linkToPessoa(lancamento.getPessoa().getId(), "pessoa"));
+		var lancamentoModel = modelMapper.map(lancamento, LancamentoModel.class);
 		
 		return lancamentoModel;
+	}
+	
+	public List<LancamentoModel> toCollectionModel(List<Lancamento> lancamentos) {
+		return lancamentos.stream().map(this::toModel).collect(Collectors.toList());
 	}
 
 }
