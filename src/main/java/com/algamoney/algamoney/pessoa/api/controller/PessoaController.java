@@ -19,10 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algamoney.algamoney.common.api.util.ApiUtil;
 import com.algamoney.algamoney.pessoa.api.assembler.PessoaInputAssembler;
 import com.algamoney.algamoney.pessoa.api.assembler.PessoaModelAssembler;
-import com.algamoney.algamoney.pessoa.api.assembler.PessoaSummaryModelAssembler;
 import com.algamoney.algamoney.pessoa.api.model.PessoaInput;
 import com.algamoney.algamoney.pessoa.api.model.PessoaModel;
-import com.algamoney.algamoney.pessoa.api.model.PessoaSummaryModel;
+import com.algamoney.algamoney.pessoa.domain.filter.PessoaFilter;
 import com.algamoney.algamoney.pessoa.domain.service.PessoaService;
 import com.algamoney.algamoney.security.CheckSecurity;
 
@@ -36,14 +35,13 @@ public class PessoaController {
 	private final PessoaService pessoaService;
 	
 	private final PessoaModelAssembler pessoaModelAssembler;
-	private final PessoaSummaryModelAssembler pessoaSummaryModelAssembler;
 	private final PessoaInputAssembler pessoaInputAssembler;
 	
 	@GetMapping
 	@CheckSecurity.Pessoa.PodeConsultar
-	public ResponseEntity<List<PessoaSummaryModel>> listar() {
-		var pessoas = pessoaService.listar();
-		var pessoasModel = pessoaSummaryModelAssembler.toCollectionModel(pessoas);
+	public ResponseEntity<List<PessoaModel>> pesquisar(PessoaFilter pessoaFilter) {
+		var pessoas = pessoaService.listar(pessoaFilter);
+		var pessoasModel = pessoaModelAssembler.toCollectionModel(pessoas);
 		
 		return ResponseEntity.ok(pessoasModel);
 	}

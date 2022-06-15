@@ -11,9 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.algamoney.algamoney.pessoa.domain.exception.PessoaInUseException;
 import com.algamoney.algamoney.pessoa.domain.exception.PessoaNotFoundException;
+import com.algamoney.algamoney.pessoa.domain.filter.PessoaFilter;
 import com.algamoney.algamoney.pessoa.domain.model.Pessoa;
 import com.algamoney.algamoney.pessoa.domain.model.Pessoa_;
 import com.algamoney.algamoney.pessoa.domain.repository.PessoaRepository;
+import com.algamoney.algamoney.pessoa.infrastructure.repository.spec.PessoaSpec;
 
 import lombok.AllArgsConstructor;
 
@@ -23,8 +25,8 @@ public class PessoaService {
 
 	private final PessoaRepository pessoaRepository;
 	
-	public List<Pessoa> listar() {
-		return pessoaRepository.findAll();
+	public List<Pessoa> listar(PessoaFilter pessoaFilter) {
+		return pessoaRepository.findAll(PessoaSpec.filter(pessoaFilter));
 	}
 	
 	public Pessoa buscar(UUID pessoaId) {

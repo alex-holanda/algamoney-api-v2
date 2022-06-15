@@ -1,5 +1,8 @@
 package com.algamoney.algamoney.pessoa.api.assembler;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -18,5 +21,9 @@ public class PessoaModelAssembler {
 		var pessoaModel = modelMapper.map(pessoa, PessoaModel.class);
 
 		return pessoaModel;
+	}
+	
+	public List<PessoaModel> toCollectionModel(List<Pessoa> pessoas) {
+		return pessoas.stream().map(this::toModel).collect(Collectors.toList());
 	}
 }

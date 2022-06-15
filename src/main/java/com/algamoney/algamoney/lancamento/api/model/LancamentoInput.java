@@ -7,6 +7,10 @@ import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import com.algamoney.algamoney.lancamento.domain.model.TipoLancamento;
 
@@ -32,11 +36,13 @@ public class LancamentoInput {
 	private CategoriaIdInput categoria;
 
 	@NotNull
+	@DateTimeFormat(iso = ISO.DATE)
 	private LocalDate vencimento;
 
 	private OffsetDateTime pagamento;
 
 	@NotNull
+	@Positive
 	private BigDecimal valor;
 
 	private String observacao;

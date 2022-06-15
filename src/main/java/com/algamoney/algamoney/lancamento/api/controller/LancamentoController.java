@@ -44,11 +44,12 @@ public class LancamentoController {
 	public ResponseEntity<Page<LancamentoModel>> pesquisar(LancamentoFilter filter, Pageable pageable) {
 		var lancamentosPage = lancamentoService.pesquisar(filter, pageable);
 		var lancamentosModel = lancamentoModelAssembler.toCollectionModel(lancamentosPage.getContent());
-		var lancamentosModelPage = new PageImpl<LancamentoModel>(lancamentosModel, pageable, lancamentosPage.getTotalElements());
+		var lancamentosModelPage = new PageImpl<LancamentoModel>(lancamentosModel, pageable,
+				lancamentosPage.getTotalElements());
 
 		return ResponseEntity.ok(lancamentosModelPage);
 	}
-	
+
 	@GetMapping("/{lancamentoId}")
 	@CheckSecurity.Lancamento.PodeConsultar
 	public ResponseEntity<LancamentoModel> buscar(@PathVariable UUID lancamentoId) {
@@ -62,6 +63,7 @@ public class LancamentoController {
 	@CheckSecurity.Lancamento.PodeGerenciar
 	public ResponseEntity<LancamentoModel> adicionar(@RequestBody @Valid LancamentoInput lancamentoInput) {
 		var lancamento = lancamentoInputAssembler.toDomainObject(lancamentoInput);
+
 		lancamento = lancamentoService.adicionar(lancamento);
 
 		var lancamentoModel = lancamentoModelAssembler.toModel(lancamento);
@@ -82,12 +84,12 @@ public class LancamentoController {
 
 		return ResponseEntity.ok(lancamentoModel);
 	}
-	
+
 	@DeleteMapping("/{lancamentoId}")
 	@CheckSecurity.Lancamento.PodeGerenciar
 	public ResponseEntity<Void> remover(@PathVariable UUID lancamentoId) {
 		lancamentoService.remover(lancamentoId);
-		
+
 		return ResponseEntity.noContent().build();
 	}
 }
