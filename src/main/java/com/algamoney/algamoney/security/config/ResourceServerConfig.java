@@ -43,7 +43,7 @@ public class ResourceServerConfig {
 				var returnTo = request.getParameter("returnTo");
 				
 				if (!StringUtils.hasText(returnTo)) {
-					returnTo = algamoneyApiProperties.getSecurity().getAuthenticationServerUrl();
+					returnTo = algamoneyApiProperties.getSecurity().getIssuerServerUrl();
 				}
 				
 				response.setStatus(302);
