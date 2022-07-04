@@ -14,6 +14,8 @@ public class LancamentoSpec {
 			if (Lancamento.class.equals(query.getResultType())) {
 				root.fetch(Lancamento_.CATEGORIA);
 				root.fetch(Lancamento_.PESSOA);
+				root.fetch(Lancamento_.UPDATED_BY);
+				root.fetch(Lancamento_.CREATED_BY);
 			}
 
 			var predicates = LancamentoUtil.criarRestricoes(filter, root, builder);

@@ -16,12 +16,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import com.algamoney.algamoney.categoria.domain.model.Categoria;
 import com.algamoney.algamoney.pessoa.domain.model.Pessoa;
+import com.algamoney.algamoney.security.domain.model.Usuario;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -60,4 +63,12 @@ public class Lancamento {
 	private BigDecimal valor;
 	
 	private String observacao;
+	
+	@ManyToOne
+	@CreatedBy
+	private Usuario createdBy;
+	
+	@ManyToOne
+	@LastModifiedBy
+	private Usuario updatedBy;
 }

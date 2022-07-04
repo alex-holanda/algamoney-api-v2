@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import com.algamoney.algamoney.categoria.api.model.CategoriaModel;
 import com.algamoney.algamoney.pessoa.api.model.PessoaSummaryModel;
+import com.algamoney.algamoney.security.api.model.UsuarioModel;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -32,4 +33,8 @@ public class LancamentoModel {
 	private BigDecimal valor;
 
 	private String observacao;
+	
+	private UsuarioModel createdBy;
+	
+	private UsuarioModel updatedBy;
 }
