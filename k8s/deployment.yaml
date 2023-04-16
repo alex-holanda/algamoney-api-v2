@@ -71,8 +71,8 @@ spec:
           value: root
         - name: SPRING_DATASOURCE_PASSWORD
           value: root
-        - name: SPRING_FLYWAY_LOCATIONS
-          value: classpath:db/migration
+#        - name: SPRING_FLYWAY_LOCATIONS
+#          value: classpath:db/migration
         resources:
           limits:
             memory: 256Mi
