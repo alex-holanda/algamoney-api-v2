@@ -48,7 +48,7 @@ kind: Deployment
 metadata:
   name: algamoney-api
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: algamoney-api
@@ -96,3 +96,4 @@ spec:
     - name: http
       protocol: TCP
       port: 8080
+      nodePort: 30000
