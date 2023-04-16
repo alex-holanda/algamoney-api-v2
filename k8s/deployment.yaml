@@ -1,0 +1,98 @@
+# Deploy do MongoDB
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysqldb
+spec:
+  selector:
+    matchLabels:
+      app: mysqldb
+  template:
+    metadata:
+      labels:
+        app: mysqldb
+    spec:
+      containers:
+      - name: mysqldb
+        image: mysql
+        ports: 
+          - containerPort: 3306
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: root
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "1"
+
+---
+# Service do MongoDB
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysqldb
+spec:
+  type: ClusterIP
+  selector:
+    app: mysqldb
+  ports:
+  - port: 3306
+
+---
+# Deployment da aplicação web Rotten Potatoes
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: algamoney-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: algamoney-api
+  template:
+    metadata:
+      labels:
+        app: algamoney-api
+    spec:
+      containers:
+      - name: algamoney-api
+        image: alexholanda/algamoney-api:{{TAG}}
+        ports:
+          - containerPort: 8080
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: dev
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://mysqldb/algamoney-api?createDatabaseIfNotExist=true&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: root
+        - name: SPRING_FLYWAY_LOCATIONS
+          value: classpath:db/migration
+        resources:
+          limits:
+            memory: 256Mi
+            cpu: "1"
+          requests:
+            memory: "128Mi"
+            cpu: "0.5"
+
+---
+# Service do Rotten Potatoes
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: algamoney-api
+spec:
+  type: NodePort
+  selector:
+    app: algamoney-api
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
