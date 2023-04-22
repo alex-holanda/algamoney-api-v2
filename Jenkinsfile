@@ -4,16 +4,16 @@ pipeline {
     stages {
 
         stage ('Unit Test') {
-                    steps {
-                        script {
-                            sh 'mvn test'
-                        }
-                    }
+            steps {
+                withMaven {
+                    sh 'mvn test'
                 }
+            }
+        }
 
         stage ('Build') {
             steps {
-                script {
+                withMaven {
                     sh 'mvn clean package'
                 }
             }
