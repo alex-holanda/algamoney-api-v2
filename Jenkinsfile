@@ -3,6 +3,22 @@ pipeline {
 
     stages {
 
+        stage ('Unit Test') {
+                    steps {
+                        script {
+                            sh 'mvn test'
+                        }
+                    }
+                }
+
+        stage ('Build') {
+            steps {
+                script {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
