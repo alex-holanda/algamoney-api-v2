@@ -5,13 +5,13 @@ pipeline {
 
         stage ('Unit Test') {
             steps {
-                sh 'mvn test'
+                sh './mvnw test'
             }
         }
 
         stage ('Build') {
             steps {
-                sh 'mvn clean package'
+                sh './mvnw clean package -DskipTests'
             }
         }
 
