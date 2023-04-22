@@ -5,12 +5,14 @@ pipeline {
 
         stage ('Unit Test') {
             steps {
+                sh 'chmod +x ./mvnw'
                 sh './mvnw test'
             }
         }
 
         stage ('Build') {
             steps {
+                sh 'chmod +x ./mvnw'
                 sh './mvnw clean package -DskipTests'
             }
         }
