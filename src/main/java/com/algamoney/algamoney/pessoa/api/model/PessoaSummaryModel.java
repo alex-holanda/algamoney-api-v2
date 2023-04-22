@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PessoaSummaryModel {
-	private UUID id;
+	private String id;
 
 	private String nome;
 
