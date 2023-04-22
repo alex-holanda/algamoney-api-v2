@@ -6,7 +6,7 @@ pipeline {
         stage ('Unit Test') {
                     steps {
                         script {
-                            sh 'mvnw test'
+                            sh 'mvn test'
                         }
                     }
                 }
@@ -14,7 +14,7 @@ pipeline {
         stage ('Build') {
             steps {
                 script {
-                    sh 'mvnw clean package'
+                    sh 'mvn clean package'
                 }
             }
         }
