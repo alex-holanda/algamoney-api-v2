@@ -1,22 +1,21 @@
 package com.algamoney.algamoney.lancamento.infrastructure.repository;
 
-import javax.persistence.EntityManager;
 
+import com.algamoney.algamoney.lancamento.domain.filter.LancamentoFilter;
+import com.algamoney.algamoney.lancamento.domain.model.Lancamento;
+import com.algamoney.algamoney.lancamento.domain.projection.ResumoLancamentoProjection;
+import com.algamoney.algamoney.lancamento.domain.repository.LancamentoRepositoryQueries;
+import com.algamoney.algamoney.lancamento.infrastructure.repository.util.LancamentoUtil;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
-import com.algamoney.algamoney.categoria.domain.model.Categoria_;
-import com.algamoney.algamoney.lancamento.domain.filter.LancamentoFilter;
-import com.algamoney.algamoney.lancamento.domain.model.Lancamento;
-import com.algamoney.algamoney.lancamento.domain.model.Lancamento_;
-import com.algamoney.algamoney.lancamento.domain.projection.ResumoLancamentoProjection;
-import com.algamoney.algamoney.lancamento.domain.repository.LancamentoRepositoryQueries;
-import com.algamoney.algamoney.lancamento.infrastructure.repository.util.LancamentoUtil;
-import com.algamoney.algamoney.pessoa.domain.model.Pessoa_;
-
-import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @Repository
@@ -26,16 +25,16 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQueries {
 
 	@Override
 	public Page<ResumoLancamentoProjection> resumir(LancamentoFilter filter, Pageable pageable) {
-		var builder = entityManager.getCriteriaBuilder();
-		var criteria = builder.createQuery(ResumoLancamentoProjection.class);
-		var root = criteria.from(Lancamento.class);
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<ResumoLancamentoProjection> criteria = builder.createQuery(ResumoLancamentoProjection.class);
+		Root<Lancamento> root = criteria.from(Lancamento.class);
 
-		criteria.select(builder.construct(ResumoLancamentoProjection.class, root.get(Lancamento_.ID),
-				root.get(Lancamento_.TIPO), root.get(Lancamento_.DESCRICAO), root.get(Lancamento_.VENCIMENTO),
-				root.get(Lancamento_.PAGAMENTO), root.get(Lancamento_.VALOR),
-				root.get(Lancamento_.CATEGORIA).get(Categoria_.NOME), root.get(Lancamento_.PESSOA).get(Pessoa_.NOME)));
+		criteria.select(builder.construct(ResumoLancamentoProjection.class, root.get("id"),
+				root.get("tipo"), root.get("descricao"), root.get("vencimento"),
+				root.get("pagamento"), root.get("valor"),
+				root.get("categoria").get("nome"), root.get("pessoa").get("nome")));
 
-		var predicates = LancamentoUtil.criarRestricoes(filter, root, builder);
+		Predicate[] predicates = LancamentoUtil.criarRestricoes(filter, root, builder);
 
 		criteria.where(predicates);
 
@@ -53,7 +52,7 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQueries {
 
 		criteria.select(builder.count(root));
 
-		var predicates = LancamentoUtil.criarRestricoes(filter, root, builder);
+		Predicate[] predicates = LancamentoUtil.criarRestricoes(filter, root, builder);
 		criteria.where(predicates);
 
 		return entityManager.createQuery(criteria).getSingleResult();

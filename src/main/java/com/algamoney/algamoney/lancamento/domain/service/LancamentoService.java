@@ -1,7 +1,17 @@
 package com.algamoney.algamoney.lancamento.domain.service;
 
-import java.util.UUID;
-
+import com.algamoney.algamoney.categoria.domain.service.CategoriaService;
+import com.algamoney.algamoney.common.domain.BusinessException;
+import com.algamoney.algamoney.common.domain.EntityNotFoundException;
+import com.algamoney.algamoney.lancamento.domain.exception.LancamentoNotFoundException;
+import com.algamoney.algamoney.lancamento.domain.filter.LancamentoFilter;
+import com.algamoney.algamoney.lancamento.domain.model.Lancamento;
+import com.algamoney.algamoney.lancamento.domain.repository.LancamentoRepository;
+import com.algamoney.algamoney.lancamento.infrastructure.repository.spec.LancamentoSpec;
+import com.algamoney.algamoney.pessoa.domain.exception.PessoaInativaException;
+import com.algamoney.algamoney.pessoa.domain.model.Pessoa;
+import com.algamoney.algamoney.pessoa.domain.service.PessoaService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -9,20 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.algamoney.algamoney.categoria.domain.service.CategoriaService;
-import com.algamoney.algamoney.common.domain.BusinessException;
-import com.algamoney.algamoney.common.domain.EntityNotFoundException;
-import com.algamoney.algamoney.lancamento.domain.exception.LancamentoNotFoundException;
-import com.algamoney.algamoney.lancamento.domain.filter.LancamentoFilter;
-import com.algamoney.algamoney.lancamento.domain.model.Lancamento;
-import com.algamoney.algamoney.lancamento.domain.model.Lancamento_;
-import com.algamoney.algamoney.lancamento.domain.repository.LancamentoRepository;
-import com.algamoney.algamoney.lancamento.infrastructure.repository.spec.LancamentoSpec;
-import com.algamoney.algamoney.pessoa.domain.exception.PessoaInativaException;
-import com.algamoney.algamoney.pessoa.domain.model.Pessoa;
-import com.algamoney.algamoney.pessoa.domain.service.PessoaService;
-
-import lombok.AllArgsConstructor;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Service
@@ -69,8 +66,7 @@ public class LancamentoService {
 
 			var lancamento = buscar(lancamentoId);
 
-			BeanUtils.copyProperties(lancamentoAtualizado, lancamento, Lancamento_.ID, Lancamento_.CATEGORIA,
-					Lancamento_.PESSOA);
+			BeanUtils.copyProperties(lancamentoAtualizado, lancamento, "id", "categoria", "pessoa");
 
 			lancamento.setCategoria(categoria);
 			lancamento.setPessoa(pessoa);

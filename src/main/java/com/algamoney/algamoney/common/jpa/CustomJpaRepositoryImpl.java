@@ -1,7 +1,8 @@
 package com.algamoney.algamoney.common.jpa;
 
-import javax.persistence.EntityManager;
 
+
+import jakarta.persistence.EntityManager;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 

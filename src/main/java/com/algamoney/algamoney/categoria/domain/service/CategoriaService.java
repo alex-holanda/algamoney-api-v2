@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.algamoney.algamoney.categoria.domain.exception.CategoriaInUseException;
 import com.algamoney.algamoney.categoria.domain.exception.CategoriaNotFoundException;
 import com.algamoney.algamoney.categoria.domain.model.Categoria;
-import com.algamoney.algamoney.categoria.domain.model.Categoria_;
 import com.algamoney.algamoney.categoria.domain.repository.CategoriaRepository;
 
 import lombok.AllArgsConstructor;
@@ -40,7 +39,7 @@ public class CategoriaService {
 	public Categoria atualizar(UUID categoriaId, Categoria categoriaAtualizada) {
 		var categoria = buscar(categoriaId);
 
-		BeanUtils.copyProperties(categoriaAtualizada, categoria, Categoria_.ID);
+		BeanUtils.copyProperties(categoriaAtualizada, categoria, "id");
 
 		return categoria;
 	}

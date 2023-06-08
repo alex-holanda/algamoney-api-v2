@@ -1,23 +1,20 @@
 package com.algamoney.algamoney.pessoa.domain.service;
 
-import java.util.List;
-import java.util.UUID;
-
+import com.algamoney.algamoney.pessoa.domain.exception.PessoaInUseException;
+import com.algamoney.algamoney.pessoa.domain.exception.PessoaNotFoundException;
+import com.algamoney.algamoney.pessoa.domain.filter.PessoaFilter;
+import com.algamoney.algamoney.pessoa.domain.model.Pessoa;
+import com.algamoney.algamoney.pessoa.domain.repository.PessoaRepository;
+import com.algamoney.algamoney.pessoa.infrastructure.repository.spec.PessoaSpec;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.algamoney.algamoney.pessoa.domain.exception.PessoaInUseException;
-import com.algamoney.algamoney.pessoa.domain.exception.PessoaNotFoundException;
-import com.algamoney.algamoney.pessoa.domain.filter.PessoaFilter;
-import com.algamoney.algamoney.pessoa.domain.model.Pessoa;
-import com.algamoney.algamoney.pessoa.domain.model.Pessoa_;
-import com.algamoney.algamoney.pessoa.domain.repository.PessoaRepository;
-import com.algamoney.algamoney.pessoa.infrastructure.repository.spec.PessoaSpec;
-
-import lombok.AllArgsConstructor;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -42,7 +39,7 @@ public class PessoaService {
 	public Pessoa atualizar(UUID pessoaId, Pessoa pessoaAtualizada) {
 		var pessoa = buscar(pessoaId);
 		
-		BeanUtils.copyProperties(pessoaAtualizada, pessoa, Pessoa_.ID);
+		BeanUtils.copyProperties(pessoaAtualizada, pessoa, "id");
 		
 		return pessoaRepository.save(pessoa);
 	}

@@ -1,20 +1,18 @@
 package com.algamoney.algamoney.lancamento.infrastructure.repository.util;
 
-import java.util.ArrayList;
 
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import com.algamoney.algamoney.lancamento.domain.filter.LancamentoFilter;
+import com.algamoney.algamoney.lancamento.domain.model.Lancamento;
 
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
-import com.algamoney.algamoney.categoria.domain.model.Categoria_;
-import com.algamoney.algamoney.lancamento.domain.filter.LancamentoFilter;
-import com.algamoney.algamoney.lancamento.domain.model.Lancamento;
-import com.algamoney.algamoney.lancamento.domain.model.Lancamento_;
-import com.algamoney.algamoney.pessoa.domain.model.Pessoa_;
+
+import java.util.ArrayList;
 
 public class LancamentoUtil {
 
@@ -22,16 +20,16 @@ public class LancamentoUtil {
 		var predicates = new ArrayList<Predicate>();
 
 		if (filter.getTipo() != null) {
-			predicates.add(builder.equal(root.get(Lancamento_.TIPO), filter.getTipo()));
+			predicates.add(builder.equal(root.get("tipo"), filter.getTipo()));
 		}
 
 		if (StringUtils.hasText(filter.getPessoa())) {
 			predicates
-					.add(builder.like(root.get(Lancamento_.PESSOA).get(Pessoa_.NOME), "%" + filter.getPessoa() + "%"));
+					.add(builder.like(root.get("pessoa").get("nome"), "%" + filter.getPessoa() + "%"));
 		}
 
 		if (StringUtils.hasText(filter.getCategoria())) {
-			predicates.add(builder.like(root.get(Lancamento_.CATEGORIA).get(Categoria_.NOME),
+			predicates.add(builder.like(root.get("categoria").get("nome"),
 					"%" + filter.getCategoria() + "%"));
 		}
 
@@ -40,7 +38,7 @@ public class LancamentoUtil {
 			var startsOn = filterYearMonth.atDay(1);
 			var endsOn = filterYearMonth.atDay(filterYearMonth.lengthOfMonth());
 
-			predicates.add(builder.between(root.get(Lancamento_.VENCIMENTO), startsOn, endsOn));
+			predicates.add(builder.between(root.get("vencimento"), startsOn, endsOn));
 		}
 
 		return predicates.toArray(new Predicate[predicates.size()]);
