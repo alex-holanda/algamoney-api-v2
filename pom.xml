@@ -138,6 +138,23 @@
 				<configuration>
 					<image>
 						<name>alexholanda/${project.artifactId}:${project.version}</name>
+						<builder>
+							<arch>linux/arm64</arch>
+							<from>paketobuildpacks/builder:tiny</from>
+						</builder>
+						<runImage>
+							<arch>linux/arm64</arch>
+							<from>paketobuildpacks/run:latest</from>
+						</runImage>
+						<env>
+							<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
+						</env>
+						<buildpacks>
+							<buildpack>
+								<arch>linux/arm64</arch>
+								<from>gcr.io/paketo-buildpacks/java-native-image:7.8.1</from>
+							</buildpack>
+						</buildpacks>
 					</image>
 					<excludes>
 						<exclude>
