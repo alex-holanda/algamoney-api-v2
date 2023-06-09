@@ -20,7 +20,7 @@ pipeline {
         stage ('Build') {
             steps {
                 sh 'chmod +x ./mvnw'
-                sh './mvnw clean -Pnative spring-boot:build-image -DskipTests'
+                sh './mvnw clean -Pnative spring-boot:build-image'
             }
         }
 
