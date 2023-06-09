@@ -31,7 +31,7 @@ public class LancamentoController {
 
 	@GetMapping
 	@CheckSecurity.Lancamento.PodeConsultar
-	public ResponseEntity<Page<LancamentoModel>> pesquisar(LancamentoFilter filter, Pageable pageable) {
+	public ResponseEntity<Page<LancamentoModel>> pesquisar(@ModelAttribute("LancamentoFilter") LancamentoFilter filter, Pageable pageable) {
 		var lancamentosPage = lancamentoService.pesquisar(filter, pageable);
 		var lancamentosModel = lancamentoModelAssembler.toCollectionModel(lancamentosPage.getContent());
 		var lancamentosModelPage = new PageImpl<LancamentoModel>(lancamentosModel, pageable,

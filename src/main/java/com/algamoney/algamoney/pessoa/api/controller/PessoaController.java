@@ -29,7 +29,7 @@ public class PessoaController {
 	
 	@GetMapping
 	@CheckSecurity.Pessoa.PodeConsultar
-	public ResponseEntity<List<PessoaModel>> pesquisar(PessoaFilter pessoaFilter) {
+	public ResponseEntity<List<PessoaModel>> pesquisar(@ModelAttribute("PessoaFilter") PessoaFilter pessoaFilter) {
 		var pessoas = pessoaService.listar(pessoaFilter);
 		var pessoasModel = pessoaModelAssembler.toCollectionModel(pessoas);
 		

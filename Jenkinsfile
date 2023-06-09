@@ -10,10 +10,17 @@ pipeline {
             }
         }
 
+        stage ('Maven Version') {
+            steps {
+                sh 'chmod +x ./mvnw'
+                sh './mvnw -version'
+            }
+        }
+
         stage ('Build') {
             steps {
                 sh 'chmod +x ./mvnw'
-                sh './mvnw clean package -DskipTests'
+                sh './mvnw clean -Pnative spring-boot:build-image -DskipTests'
             }
         }
 
