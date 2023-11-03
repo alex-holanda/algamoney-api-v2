@@ -59,7 +59,7 @@ spec:
     spec:
       containers:
       - name: algamoney-api
-        image: alexholanda/algamoney-api:{{TAG}}
+        image: alexholanda/algamoney-api
         ports:
           - containerPort: 8080
         env:
