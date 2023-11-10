@@ -48,7 +48,7 @@ kind: Deployment
 metadata:
   name: algamoney-api
 spec:
-  replicas: 2
+  replicas: 6
   selector:
     matchLabels:
       app: algamoney-api
