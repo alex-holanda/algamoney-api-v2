@@ -89,11 +89,10 @@ kind: Service
 metadata:
   name: algamoney-api
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: algamoney-api
   ports:
     - name: http
       protocol: TCP
       port: 8080
-      nodePort: 30000
